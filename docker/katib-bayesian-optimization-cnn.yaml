@@ -1,0 +1,67 @@
+---
+apiVersion: "kubeflow.org/v1beta1"
+kind: Experiment
+metadata:
+  name: cnn-hyperparameter-tuning
+  namespace: kubeflow
+spec:
+  objective:
+    type: maximize
+    goal: 0.99 # Target accuracy
+    objectiveMetricName: accuracy
+  algorithm:
+    algorithmName: bayesianoptimization
+  parameters:
+    - name: --learning-rate
+      parameterType: double
+      feasibleSpace:
+        min: "0.001"
+        max: "0.1"
+    - name: --batch-size
+      parameterType: int
+      feasibleSpace:
+        min: "32"
+        max: "128"
+    - name: --optimizer
+      parameterType: categorical
+      feasibleSpace:
+        list:
+          - sgd
+          - adam
+          - rmsprop
+  trialTemplate:
+    primaryContainerName: training-container
+    trialParameters:
+      - name: learningRate
+        description: Learning rate for training
+        reference: --learning-rate
+      - name: batchSize
+        description: Batch size for training
+        reference: --batch-size
+      - name: optimizer
+        description: Optimizer type
+        reference: --optimizer
+    trialSpec:
+      apiVersion: batch/v1
+      kind: Job
+      spec:
+        template:
+          spec:
+            containers:
+              - name: training-container
+                image: fsgurapsl/mnist-trainer:optimizer
+                command:
+                  - "python3"
+                  - "/opt/pytorch-mnist/mnist.py"
+                  - "--batch-size=${trialParameters.batchSize}"
+                  - "--lr=${trialParameters.learningRate}"
+                  - "--optimizer=${trialParameters.optimizer}"
+            restartPolicy: Never
+  parallelTrialCount: 3
+  maxTrialCount: 12
+  maxFailedTrialCount: 6
+  metricsCollectorSpec:
+    collector:
+      kind: StdOut
+  resumePolicy: Never
+

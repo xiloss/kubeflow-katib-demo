@@ -1,0 +1,31 @@
+# using python slim image
+FROM python:3.11-slim
+
+# Set working directory
+WORKDIR /opt/pytorch-mnist
+
+# Add folder for the logs.
+RUN mkdir /katib
+
+# Install any additional dependencies (if needed)
+RUN pip install --upgrade pip
+
+# Install required packages
+# Required since torchvision==0.17.1 is incompatible with numpy 2.0
+RUN pip install numpy==1.26.0
+RUN pip install --prefer-binary --no-cache-dir torch==2.2.1 torchvision==0.17.1
+RUN pip install --prefer-binary --no-cache-dir cloudml-hypertune==0.1.0.dev6
+
+
+# Copy mnist.py into the container
+COPY mnist-optimizer.py /opt/pytorch-mnist/mnist.py
+
+# Set permissions
+RUN chgrp -R 0 /opt/pytorch-mnist \
+  && chmod -R g+rwX /opt/pytorch-mnist \
+  && chgrp -R 0 /katib \
+  && chmod -R g+rwX /katib
+
+# Default command to run mnist.py
+CMD ["python3", "/opt/pytorch-mnist/mnist.py"]
+
