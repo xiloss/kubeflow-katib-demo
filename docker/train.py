@@ -21,6 +21,8 @@ def main():
     # determines the number of samples processed before the model's 
     # internal parameters are updated.
     parser.add_argument('--batch_size', type=int, default=64, help='Batch size')
+    # next code is used to save the model after the katib hyperparameters tuning
+    # parser.add_argument('--model_path', type=str, default='trained_model.h5', help='Path to save the trained model')
     args = parser.parse_args()
 
     # Load and preprocess MNIST data
@@ -70,6 +72,10 @@ def main():
 
     # Output the accuracy in the format expected by Katib
     print(f'accuracy={accuracy}')
+
+    # Once we find the hyperparameters tuning output,
+    # we can save the optimized model
+    # model.save(args.model_path)
 
 if __name__ == '__main__':
     main()
