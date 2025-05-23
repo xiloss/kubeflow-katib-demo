@@ -119,4 +119,18 @@ kubectl create -n kubeflow docker/mnist-hyperparameter-tuning.yaml
 
 Opening the UI, there should be now an available `mnist-hyperparameter-tuning` link in the list. Opening it should show the elapsing evolution of the experiment and the report.
 
+## Hyperparameters Generics
 
+|Hyperparameter|Purpose|
+|--------------|-------|
+|Learning Rate|Controls how big the updates to the model weights are during training. A high value may overshoot minima, while a low value may slow down convergence.|
+|Batch Size|Number of samples processed before the model updates its weights. Larger batches can be faster but may generalize worse.|
+|Number of Epochs|Number of times the model sees the entire training dataset. More epochs allow more learning, but can lead to overfitting.|
+|Optimizer|Algorithm used to update model weights (e.g., SGD, Adam, RMSprop). Affects convergence speed and stability.|
+|Dropout Rate|Proportion of neurons randomly "dropped" during training to reduce overfitting.|
+|Number of Layers|Defines the depth of the neural network. More layers increase capacity but also complexity and overfitting risk.|
+|Units per Layer|Number of neurons in each layer. Affects the model's representational power.|
+|Weight Initialization|Method to set initial weight values (e.g., Xavier, He). Helps avoid issues like vanishing/exploding gradients.|
+|Activation Function|Determines neuron output behavior (e.g., ReLU, Sigmoid, Tanh). Adds non-linearity to the model.
+|Momentum	Helps accelerate gradient descent by smoothing updates, especially in SGD.|
+|Early Stopping Patience|Number of epochs without validation improvement before stopping training early. Helps prevent overfitting.|
