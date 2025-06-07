@@ -4,7 +4,7 @@
 
 ### Install kind
 
-The install kind you can use the next code snippet:
+To install kind you can use the next code snippet:
 
 ```bash
 curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.20.0/kind-linux-amd64
