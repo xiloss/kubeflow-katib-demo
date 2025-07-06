@@ -540,3 +540,18 @@ The experiment starts by defining the search space for `lr` and `batch_size`.
   **Purpose**: Automate hyperparameter tuning for a PyTorch MNIST classifier using Random Search.
 
   **Relevance**: Demonstrates a simpler, baseline approach to hyperparameter tuning, useful for comparing against more advanced methods like Bayesian Optimization.
+
+
+### Comparison Table of the Three Experiments
+
+|FEATURE|EXP 1 - BAYESIAN SIMPLE|EXP 2 - RANDOM SEARCH|EXP 3 - BAYESIAN CNN|
+|-|-|-|-|
+|Goal|Minimize loss to 0.001|Maximize accuracy to 0.99|Maximize accuracy to 0.99|
+|Algorithm|Bayesian Optimization|Random Search|Bayesian Optimization|
+|Search Strategy|Sequential, learns from past trials|Random sampling, no learning|Sequential, learns from past trials|
+|Hyperparameters|`lr`,`momentum` (both double)|`lr`(double),`batch_size`(categorical)|`learning-rate`(double),`batch-size`(int),`optimizer`(categorical)|
+|Training Image|`ghcr.io/kubeflow/katib/pytorch-mnist-cpu:latest`|`fsgurapsl/mnist-trainer:latest`|`fsgurapsl/mnist-trainer:optimizer`|
+|Trial Count|Max: 12, Parallel: 3|Max: 9, Parallel: 3|Max: 12, Parallel: 3|
+|Objective Metric|Loss|Accuracy|Accuracy|
+|Batch Size Type|Fixed (16)|Categorical ([32, 64, 128])|Continuous range (32–128)|
+|Momentum|Tunable (double,0.5–0.9)|Not used|Not used|
